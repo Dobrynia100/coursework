@@ -240,8 +240,7 @@ int hill(int* p)
     x =Raspis(D,N);
     cout << "приспособленность x-" << x << endl;
     max = x;
-    int** okrs;
-	okrs = new int* [50];
+    int** okrs = new int* [40];
 		for (int j = 0; j < N; j++)
 		{
 			okrs[j] = new int[N];
@@ -267,23 +266,13 @@ int hill(int* p)
 		cout << " Шаг-" << i << endl;
 		cout << " maxX-" << maxX << endl;
 		cout << " max-" << max << endl;
-		for (int j = 0; j < N; j++)
-		{
-
-			cout << maxO[j] << " X2 ";
-		}
-		cout << endl;
+		
 		//auto res = okr(N, D, okrs);//почему тригерит maxO ???
-		for (int j = 0; j < N; j++)
-		{
-
-			cout << maxO[j] << " X1 ";
-		}
-		cout << endl;
+		okr(N, D, okrs);
+		
         for (int k = 0; k < nokr; k++)//поиск макс окр
         {
-			
-			
+						
 			for (int j = 0; j < N; j++)
 			{
 
@@ -332,7 +321,7 @@ int hill(int* p)
 		for (int j = 0; j < N; j++)
 		{
 
-			cout << maxO[j]<<"X";
+			cout << maxO[j];
 		}
 		cout << endl;
 		D = maxO;
@@ -360,7 +349,7 @@ int hill(int* p)
 	}
 	delete[] okrs;
 	cout << " финальный штраф " << x << endl;;
-    return 0;
+    return x;
 }
 
 
@@ -391,7 +380,7 @@ int main()
 	for (int i = 0; i < N; i++)p[i] = i+1;
 	initRaspis(p, N);
 	cout << "метод восхождения на холм " << endl;
-	hill(p);
+	int o = hill(p);
 	Best = new int[N];
 	int M = Perebor(0, p, N);
 	cout << " Точное решение " << M << endl;
@@ -399,6 +388,11 @@ int main()
 	{
 		cout << Best[j];
 	}
+	o = ((o - M) / M) * 100 ;
+	cout << endl;
+	cout << "Относительное отклонение ="<<o<<"%";
+	double ab = (o - M) / N;
+	cout << "Абсолютное отклонение =" << ab;
 	//delete[] X;
 	//delete[] Y;
 	//delete[] T;
