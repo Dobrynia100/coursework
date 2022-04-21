@@ -2,32 +2,33 @@
 #include <algorithm>
 #include <math.h>
 #include <cmath>
+#include <iomanip>      
 #include <locale.h>
 using namespace std;
 int* Best;
 int N;//множество работ
 int  nokr = 0;
-	int* X = new int[N]; //момент начала выполнения работ
-	int* Y = new int[N];//момент конца выполнения работ
-	int* T = new int[N]; //длительность выполнений работ
-	int* D = new int[N]; //директивные сроки
-	int* d = new int[N]; //вектор моментов поступлений работ
-	int* C = new int[N]; //стоимость ожидания обслуживания
-	int* F = new int[N];//коэффициент штрафов
-	
-	void output(int i)
-	{
-		cout << " \t 2задача №" << i << endl;
-		//cout << "  момент начала выполнения X=" << X[i] << endl;
-		//cout << "  момент конца выполнения Y=" << Y[i] << endl;
-		cout << "   T=" << T[i];
-			cout << "   D=" << D[i];
-			cout << "   d=" << d[i];
-		//cout << "  коэффициент штрафов F=" << F[i] << endl;
-			cout << endl;
-	}
+int* X = new int[N]; //момент начала выполнения работ
+int* Y = new int[N];//момент конца выполнения работ
+int* T = new int[N]; //длительность выполнений работ
+int* D = new int[N]; //директивные сроки
+int* d = new int[N]; //вектор моментов поступлений работ
+int* C = new int[N]; //стоимость ожидания обслуживания
+int* F = new int[N];//коэффициент штрафов
 
-	
+void output(int i)
+{
+	cout << " \t задача №" << i+1 << endl;
+	//cout << "  момент начала выполнения X=" << X[i] << endl;
+	//cout << "  момент конца выполнения Y=" << Y[i] << endl;
+	cout << "   T=" << T[i];
+	cout << "   D=" << D[i];
+	cout << "   d=" << d[i];
+	//cout << "  коэффициент штрафов F=" << F[i] << endl;
+	cout << endl;
+}
+
+
 int* permutation(int n, int* p)
 {
 	int* ar = new int[n];
@@ -49,27 +50,27 @@ int* permutation(int n, int* p)
 void initRaspis(int* p, int n)
 {
 
-	
+
 	cout << "ручной ввод других данных ? (y/n)" << endl;
 	char c;
 	cin >> c;
-	
+
 	if (c == 'n')
 	{//
-		here:
-		srand(time(NULL));
-			for (int i = 0; i < N; i++)
-			{
-				
-				T[i] = rand() % 10 + 1;
-				d[i] = rand() % 10 + 1;
-				D[i] = rand() % 2*T[i]+T[i];
-				C[i] = rand() % 10 + 0;
-				X[0] = 0;		
-				//cout << " \t 1задача №" << i << endl;
+	here:
+		//srand(time(NULL));
+		for (int i = 0; i < N; i++)
+		{
 
-				output(i);
-			}
+			T[i] = rand() % 10 + 1;
+			d[i] = rand() % 10 + 1;
+			D[i] = rand() % (2 * (T[i] + d[i]))+ (T[i]+d[i]);
+			C[i] = rand() % 10 + 0;
+			X[0] =0;
+			//cout << " \t 1задача №" << i << endl;
+
+			output(i);
+		}
 
 	}
 	else
@@ -80,8 +81,8 @@ void initRaspis(int* p, int n)
 }
 int Raspis(int* p, int N)//получаем порядок выводим его штрафы
 {
-	
-	int m=0;
+
+	int m = 0;
 	/*for (int i = 0; i < N; i++)
 	{
 		cout << " p[i]-1=" << p[i] - 1 << endl;
@@ -90,36 +91,30 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	}*/
 	/*
 	Y[0] = X[p[0]-1] + T[p[0]-1];
-	for (int i = 1; i <= N; i++)
-	{
-		cout << "\t i=" << i << endl;
-		X[i] = Y[i - 1];// rand() % 10 + 0;
-		cout << " X=" << X[i - 1] << endl;
-		Y[i] = X[p[i-1]] + T[p[i-1]];// rand() % 10 + 0;
-		cout << " Y=" << Y[i - 1] << endl;
-		
 
-		}
 	*/
-	
-	Y[0] = T[p[0]-1];//12345 34512 p0-1=2
+	cout << "T T T " << endl;
+	Y[0] = T[p[0] - 1];//12345 34512 p0-1=2
 	for (int i = 1; i < N; i++)
 	{
-		
-		X[i] =Y[i - 1]+1;
-		
-		Y[i] = X[i] + T[p[i]-1];
-		
+
+		X[i] = Y[i - 1] + 1;
+
+		Y[i] = X[i] + T[p[i] - 1];
+
+		//cout << " X=" << X[i] << endl;
+		//cout << " Y=" << Y[i] << endl;
+		if (Y[i] > D[i]) { return -1; }
 		F[i - 1] = abs(d[i - 1] - X[i - 1]);
-		
+
 		
 		//output(i);
 
 
 	}
 
-	F[N-1] = abs(d[N - 1] - X[N - 1]);
-	int max=0;
+	F[N - 1] = abs(d[N - 1] - X[N - 1]);
+	int max = 0;
 	for (int i = 0; i < N; i++)
 	{
 		//максимум
@@ -127,10 +122,10 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 			max = F[i];
 	}
 	m = max;
-	//cout << " m=" << m << endl;
+	cout << " m=" << m << endl;
 	//m=штраф расписания
 	return m;
-	
+
 }
 
 int Perebor(int k, int* p, int N)
@@ -143,6 +138,7 @@ int Perebor(int k, int* p, int N)
 			for (int i = 0; i < N; i++)
 				cout << p[i];
 			m = Raspis(p, N);//строим расписание. Написать отдельную функцию 
+			if (m == -1) { cout << "некорректная последовательность" << endl; goto here; }
 			if (min1 > m)// ищем минимум
 			{
 				min1 = m;
@@ -156,6 +152,7 @@ int Perebor(int k, int* p, int N)
 	}
 	//фиксированная часть, уже построенная длины k
 	//формируем остаток
+	here:
 	for (int j = k; j < N; j++)
 	{
 		swap(p[k], p[j]);//переставили местами
@@ -167,88 +164,112 @@ int Perebor(int k, int* p, int N)
 
 int hamingDist(int* ar, int* D)
 {
-    int hamingCount = 0;
-    for (int i = 0; i < N; i++) {
+	int hamingCount = 0;
+	for (int i = 0; i < N; i++) {
 		/*cout << ar[i]<<"-";
 		cout << D[i];*/
 
-        if (ar[i] != D[i]) {
-            hamingCount++;
-        }
-    }
+		if (ar[i] != D[i]) {
+			hamingCount++;
+		}
+	}
 	//cout << hamingCount << " ";
-    return hamingCount;
+	return hamingCount;
 }
 
-int** okr(int n, int* D, int** okrs)
+int** okr(int n, int* D, int** okrs,int dot)
 {
-    
-    cout << " окрестность: ";
-	int* ar = new int[n];
+
+	cout << " окрестность: ";
+	int* ar = new int[N];
 	for (int i = 0; i < n; ++i) {
 		ar[i] = D[i]; //cout << ar[i];
 	}
 	//cout << endl;
-	do
+	/*do
 	{
 		
 		if (hamingDist(ar, D) == 2)
 		{
 			//cout << "-";
 			//for (int k = 0; k < m; k++) {
-				for (int j = 0; j < N; j++) {
-					okrs[nokr][j] = ar[j];
-					cout << ar[j];
-				}
-				cout << endl;
+			for (int j = 0; j < N; j++) {
+				okrs[nokr][j] = ar[j];
+				cout << ar[j];
+			}
+			cout << endl;
 			//}
-				
+
 			nokr++;
 		}
 		//cout << "+";
-	} while (next_permutation(ar, ar + n)&& nokr!=N);//не все перестановки,только ближайшая,выбрать точку
-
+		
+	} while (next_permutation(ar, ar + n) && nokr != N);//не все перестановки,только ближайшая,выбрать точку
 	
-    cout << endl;
-   // struct result { int** okrs; int nokr; };
+	*/
+	swap(ar[dot], ar[0]);
+	for (int k = 1; k <= N; k++) {
+		
+		for (int j = 0; j < N; j++) {
+			okrs[nokr][j] = ar[j];
+			cout << ar[j];
+		}
+		cout << endl;
+		nokr++;
+		//							1			2				3->4				
+		//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12453		
+		if (k != dot) { swap(ar[dot], ar[k-1]); swap(ar[k], ar[dot]); }
+		else {  swap(ar[dot], ar[k - 1]); swap(ar[k], ar[k + 1]); k++;}
+	}
+	
+	//cout << "nokr-" << nokr;
+	// struct result { int** okrs; int nokr; };
 	return okrs;//result{ okrs,m };
 
 }
 
 int hill(int* p)
 {
-	
-	int i = 0,n=N;
-    unsigned int maxX, max = 0, x0, x = 0,x1;
+
+	int c = 0, n = N,i=0;
+	unsigned int dot, max = 0, x = 0, x1=0;
 	int* D;
 	D = new int[N];
 	int* maxO = new int[N];
+
 	for (int j = 0; j < N; j++) //кодировки
 	{
 
 		D[j] = p[j];
-		
+		maxO[j] = D[j];
 		cout << " " << p[j];
 	}
+	
 	cout << endl;
-    srand(time(NULL));
+	//srand(time(NULL));
+	int* udot = new int[N];
+	dot = rand() % (N);
+	udot[c] = dot;
+	c++;
+	//x0 = D[x0];
+	cout << " нач точка p[" << dot<<"]" << endl;
+	x = Raspis(D, N);
+	
+	cout << "штраф начальной перестановки-" << x << endl;
+	max = x;
+	int** okrs = new int* [n+1];
+	for (int j = 0; j < N; j++)
+	{
+		okrs[j] = new int[N];
+	}
 
-    x0 = rand() % (N);
-    //x0 = D[x0];
-    cout << " нач maxX " << x0 << endl;
-    maxX = x0;
-    x =Raspis(D,N);
-    cout << "приспособленность x-" << x << endl;
-    max = x;
-    int** okrs = new int* [40];
-		for (int j = 0; j < N; j++)
-		{
-			okrs[j] = new int[N];
-		}
-	
-    int z = 0, m = 0;
+	int m = 0;
 	int* per = new int[N];
-	
+	for (int j = 0; j < N; j++)
+	{
+		per[j] = 0;
+	}
+
 	while (i <= n)
 	{
 
@@ -264,24 +285,27 @@ int hill(int* p)
 		*/
 
 		cout << " Шаг-" << i << endl;
-		cout << " maxX-" << maxX << endl;
-		cout << " max-" << max << endl;
-		
+		cout << " точка-p[" << dot << "]" <<endl;
+		cout << " max штраф-" << max << endl;
+
 		//auto res = okr(N, D, okrs);//почему тригерит maxO ???
-		okr(N, D, okrs);
-		
-        for (int k = 0; k < nokr; k++)//поиск макс окр
-        {
-						
+		okr(N, D, okrs,dot);
+
+		for (int k = 0; k < nokr; k++)//поиск макс окр
+		{
+
 			for (int j = 0; j < N; j++)
 			{
 
 				per[j] = okrs[k][j];
 			}
 			// x1 = 0;
-		
-			x1 = Raspis(per, N);
 			
+			x1 = Raspis(per, N);
+			if (x1 == -1) {
+				cout << "некорректная последовательность" << endl;
+				goto here1;
+			}
 			cout << "выбр перестановка ";
 			for (int j = 0; j < N; j++)
 			{
@@ -289,34 +313,35 @@ int hill(int* p)
 				cout << per[j];
 			}
 			cout << endl;
-			cout << "ее приспособленность=" << x1 << endl;
-		
-            if (x1 < max)
-            {
-                maxO = okrs[k];
-               
-                cout << "нов макс окр ="<< endl;
+			cout << "ее штраф=" << x1 << endl;
+
+			if (x1 < max)
+			{
+				maxO = okrs[k];
+
+				cout << "нов макс окр =" << endl;
 				for (int j = 0; j < N; j++)
 				{
 
 					cout << maxO[j];
 				}
 				cout << endl;
-                max = x1;
+				max = x1;
 
-            }
-		
+			}
+		here1:
 			cout << endl;
-        }
-
-        cout << "\t";
-      //  mmx = maxO;
-      
-      //  
-        i++;
-        // сout << "\n";
-        
 		
+		}
+		nokr = 0;
+		cout << "\t";
+		//  mmx = maxO;
+
+		//  
+		i++;
+		// сout << "\n";
+
+
 		cout << "финал макс окр = ";
 		for (int j = 0; j < N; j++)
 		{
@@ -326,61 +351,137 @@ int hill(int* p)
 		cout << endl;
 		D = maxO;
 		x = max;
-		maxX = rand() % (N);
-      //  x = x1;
+		dot = rand() % (N);
+		udot[c] = dot;
+		c++;
+		//  x = x1;
 
-       // cout << "приспособленность x-" << x << endl;
-        // cout << "код. x0-" << x0 << endl;
-      /*  if (x > max)
-        {
-            max = x;
-            maxX = maxO;
-         
+		 // cout << "приспособленность x-" << x << endl;
+		  // cout << "код. x0-" << x0 << endl;
+		/*  if (x > max)
+		  {
+			  max = x;
+			  maxX = maxO;
 
-            cout << "новый maxX-" << maxX << endl;
-            cout << "новый max-" << max << endl;
-        }
-        else { break; }
-		*/
-		
-    }
+			  cout << "новый maxX-" << maxX << endl;
+			  cout << "новый max-" << max << endl;
+		  }
+		  else { break; }
+		  */
+
+	}
 	for (int i = 0; i < N; i++) {
 		delete[] okrs[i];
 	}
 	delete[] okrs;
 	cout << " финальный штраф " << x << endl;;
-    return x;
+	return x;
 }
 
-
-
-/*
-int hill(int* p, int start)
-{
-	int next = start;
-	int current;
-	do {
-		current = next;
-		for (int i = 0; i < res.m;i++)
-		{
-			if (Problem.EVAL(x) > problem.EVAL(next))
-				next = x;
-		}
-	} while (current != next)
-	return next;
-}*/
 int main()
 {
 
 	setlocale(LC_ALL, "RUS");
-	srand(time(NULL));
+	srand(time(0));
 	cout << "введите количество работ" << endl;
 	cin >> N;
 	int* p = new int[N];
-	for (int i = 0; i < N; i++)p[i] = i+1;
+	for (int i = 0; i < N; i++)p[i] = i + 1;
 	initRaspis(p, N);
+	if (Raspis(p, N) == -1) {
+		cout << "некорректная последовательность" << endl;
+
+		int* p1 = new int[N];
+		int* p2 = new int[N];
+		for (int i = 0; i < N; i++) { p1[i] = i + 1; p2[i] = i + 1;
+		}
+		int min = 100;
+		cout << "Упорядочивание" << endl;
+		//с помощью F или с помощью d ??
+		//c помощью F берем одно из чисел и смотрим на какой из позиций F меньше-лучше подойдет для 3тьего
+		//с помощью смотрим по времени поступления ,сравниваем -лучше подойдет для 4 условия
+		for (int k = 0; k < N; k++)
+		{
+			for (int k1 = 0; k1 < N; k1++)
+			{
+				cout << p1[k1];
+			}
+			cout << endl;
+			/*
+			Y[0] = T[p1[0] - 1];
+			while(Y[]<D[k])
+			{
+				X[j] = Y[j - 1] + 1;
+
+				Y[j] = X[j] + T[p[j] - 1];
+					F[k] = abs(d[k] - X[j - 1]);
+				if (F[k] < min)
+				{
+					min = F[k];
+				}
+				swap(p1[k], p1[j+1]);
+			}*/
+			swap(p1[k], p1[0]);
+			cout << "свап-";
+			for (int k1 = 0; k1 < N; k1++)
+			{
+				cout << p1[k1];
+			}
+			cout << endl;
+			Y[0] = T[p1[0] - 1];
+			X[0] = 0;
+			F[k] = abs(d[k] - X[0]);
+			min = F[k];
+			cout << "min-" << min << endl;
+			for (int i = 0; i < N; i++)p2[i] = p1[i];
+			if (min != 0) {
+				for (int j = 1; j <= N; j++) {
+					Y[0] = T[p1[0] - 1];
+					X[0] = 0;
+					X[j] = Y[j - 1] + 1;
+					Y[j] = X[j] + T[p1[j - 1] - 1];
+					cout << " X=" << X[j] << endl;
+					cout << " Y=" << Y[j] << endl;
+					cout << " D=" << D[j-1] << endl;
+					if (Y[j] > D[j]) { break; }
+					F[k] = abs(d[k] - X[j - 1]);
+					cout << "F[" << k << "]" << F[k] << endl;
+					if (F[k] < min)
+					{
+						min = F[k];
+						for (int i = 0; i < N; i++)p2[i] = p1[i];
+						cout << "p2-";
+						for (int k1 = 0; k1 < N; k1++)
+						{
+							cout << p2[k1];
+						}
+
+						cout << endl;
+						cout << "min- " << min << endl;
+					}
+					cout << "p1-";
+
+					//							1			2				3->4				
+					//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12453		
+
+					if (j != k) { swap(p1[k], p1[j - 1]); swap(p1[j], p1[k]); }
+					else { swap(p1[k], p1[j - 1]); swap(p1[j], p1[j + 1]); j++; }
+
+					for (int k1 = 0; k1 < N; k1++)
+					{
+						cout << p1[k1];
+					}
+					cout << endl;
+				}
+
+				for (int i = 0; i < N; i++)p1[i] = p2[i];
+			}
+
+		}
+		for (int i = 0; i < N; i++)p[i] = p1[i];
+	}
 	cout << "метод восхождения на холм " << endl;
-	int o = hill(p);
+	int prib = hill(p);
 	Best = new int[N];
 	int M = Perebor(0, p, N);
 	cout << " Точное решение " << M << endl;
@@ -388,13 +489,17 @@ int main()
 	{
 		cout << Best[j];
 	}
-	o = ((o - M) / M) * 100 ;
+	double o = ((prib- M) / M) * 100;
 	cout << endl;
-	cout << "Относительное отклонение ="<<o<<"%";
-	double ab = (o - M) / N;
-	cout << "Абсолютное отклонение =" << ab;
-	//delete[] X;
-	//delete[] Y;
-	//delete[] T;
+	cout << "Относительное отклонение =" <<setprecision(2) << o << "%" << endl;
+	double ab = (prib - M) / N;
+	cout << "Абсолютное отклонение =" << setprecision(2) << ab;
+	delete[] X;
+	delete[] Y;
+	delete[] T;
+	delete[] d;
+	delete[] D;
+	delete[] C;
+	delete[] F;	
 	return 0;
 }
