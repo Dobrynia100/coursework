@@ -103,7 +103,7 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 		{
 			X[i] = Y[i - 1] + 1;
 		}
-		else X[i] = Y[i - 1] + d[i];
+		else X[i] = d[i];
 
 		Y[i] = X[i] + T[p[i] - 1];
 
@@ -262,7 +262,7 @@ int hill(int* p)
 	
 	cout << "штраф начальной перестановки-" << x << endl;
 	max = x;
-	int** okrs = new int* [n+1];
+	int** okrs = new int* [n];
 	for (int j = 0; j < N; j++)
 	{
 		okrs[j] = new int[N];
