@@ -66,7 +66,7 @@ void initRaspis(int* p, int n)
 			d[i] = rand() % 10 + 1;
 			D[i] = rand() % (2 * (T[i] + d[i]))+ (T[i]+d[i]);
 			C[i] = rand() % 10 + 0;
-			X[0] =0;
+			//X[0] =0;
 			//cout << " \t 1задача №" << i << endl;
 
 			output(i);
@@ -93,18 +93,23 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	Y[0] = X[p[0]-1] + T[p[0]-1];
 
 	*/
-	cout << "T T T " << endl;
-	Y[0] = T[p[0] - 1];//12345 34512 p0-1=2
+	//cout << "T T T " << endl;
+	//12345 34512 p0-1=2
+	X[0] = d[p[0] - 1];
+	Y[0] = T[p[0] - 1]+X[0];
 	for (int i = 1; i < N; i++)
 	{
-
-		X[i] = Y[i - 1] + 1;
+		if (d[i] <= Y[i - 1])
+		{
+			X[i] = Y[i - 1] + 1;
+		}
+		else X[i] = Y[i - 1] + d[i];
 
 		Y[i] = X[i] + T[p[i] - 1];
 
 		//cout << " X=" << X[i] << endl;
 		//cout << " Y=" << Y[i] << endl;
-		if (Y[i] > D[i]) { return -1; }
+		if (X[i] < d[i]) { return -1; }
 		F[i - 1] = abs(d[i - 1] - X[i - 1]);
 
 		
@@ -289,8 +294,21 @@ int hill(int* p)
 		cout << " max штраф-" << max << endl;
 
 		//auto res = okr(N, D, okrs);//почему тригерит maxO ???
-		okr(N, D, okrs,dot);
+		cout << "maxO1 ";
+		for (int j = 0; j < N; j++)
+		{
 
+			cout << maxO[j];
+		}
+		cout << endl;
+		okrs=okr(N, D, okrs,dot);
+		cout << "maxO2 ";
+		for (int j = 0; j < N; j++)
+		{
+
+			cout << maxO[j];
+		}
+		cout << endl;
 		for (int k = 0; k < nokr; k++)//поиск макс окр
 		{
 
@@ -390,7 +408,7 @@ int main()
 	initRaspis(p, N);
 	if (Raspis(p, N) == -1) {
 		cout << "некорректная последовательность" << endl;
-
+/*
 		int* p1 = new int[N];
 		int* p2 = new int[N];
 		for (int i = 0; i < N; i++) { p1[i] = i + 1; p2[i] = i + 1;
@@ -400,6 +418,7 @@ int main()
 		//с помощью F или с помощью d ??
 		//c помощью F берем одно из чисел и смотрим на какой из позиций F меньше-лучше подойдет для 3тьего
 		//с помощью смотрим по времени поступления ,сравниваем -лучше подойдет для 4 условия
+		
 		for (int k = 0; k < N; k++)
 		{
 			for (int k1 = 0; k1 < N; k1++)
@@ -420,7 +439,7 @@ int main()
 					min = F[k];
 				}
 				swap(p1[k], p1[j+1]);
-			}*/
+			}//
 			swap(p1[k], p1[0]);
 			cout << "свап-";
 			for (int k1 = 0; k1 < N; k1++)
@@ -439,7 +458,7 @@ int main()
 					Y[0] = T[p1[0] - 1];
 					X[0] = 0;
 					X[j] = Y[j - 1] + 1;
-					Y[j] = X[j] + T[p1[j - 1] - 1];
+					Y[j] = X[j] + T[p1[j] - 1];
 					cout << " X=" << X[j] << endl;
 					cout << " Y=" << Y[j] << endl;
 					cout << " D=" << D[j-1] << endl;
@@ -479,7 +498,9 @@ int main()
 
 		}
 		for (int i = 0; i < N; i++)p[i] = p1[i];
-	}
+		*/	}
+	
+	
 	cout << "метод восхождения на холм " << endl;
 	int prib = hill(p);
 	Best = new int[N];
@@ -489,17 +510,12 @@ int main()
 	{
 		cout << Best[j];
 	}
-	double o = ((prib- M) / M) * 100;
+	double o1 = ((prib- M) / M) ;
+	int o = o1 * 100;
 	cout << endl;
 	cout << "Относительное отклонение =" <<setprecision(2) << o << "%" << endl;
-	double ab = (prib - M) / N;
+	double ab = (prib - M)/ N;
 	cout << "Абсолютное отклонение =" << setprecision(2) << ab;
-	delete[] X;
-	delete[] Y;
-	delete[] T;
-	delete[] d;
-	delete[] D;
-	delete[] C;
-	delete[] F;	
+	
 	return 0;
 }
