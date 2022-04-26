@@ -307,6 +307,11 @@ int hill(int* p)
 		D = maxO;
 		x = max;
 		dot = rand() % (N);
+		for (int j = 0; j < c; j++)
+		{
+			if (dot == udot[j])
+				dot = rand() % (N); 
+		}
 		udot[c] = dot;
 		c++;
 		
@@ -438,8 +443,12 @@ int main()
 	int o = o1 * 100;
 	cout << endl;
 	cout << "Относительное отклонение =" <<setprecision(2) << o << "%" << endl;
-	double ab = (prib - M)/ N;
-	cout << "Абсолютное отклонение =" << setprecision(2) << ab;
+	double ab1 = (prib - M)/ N;
+	double ab;
+	if (ab1 != 0)
+		ab = ab1 / N;
+	else ab = 0;
+	cout << "Абсолютное отклонение ="  << ab;
 	
 	return 0;
 }
