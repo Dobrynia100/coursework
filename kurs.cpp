@@ -28,25 +28,6 @@ void output(int i)
 	cout << endl;
 }
 
-
-int* permutation(int n, int* p)
-{
-	int* ar = new int[n];
-	for (int i = 0; i < n; ++i)
-		ar[i] = i + 1;
-
-	do
-	{
-		for (int i = 0; i < n; ++i) {
-			//cout << ar[i] << " ";
-			p[i] = ar[i];
-		}
-		//cout << endl;
-
-	} while (next_permutation(ar, ar + n));
-
-	return p;
-}
 void initRaspis(int* p, int n)
 {
 
@@ -83,16 +64,7 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 {
 
 	int m = 0;
-	/*for (int i = 0; i < N; i++)
-	{
-		cout << " p[i]-1=" << p[i] - 1 << endl;
-		m+= X[p[i]-1] + T[p[i]-1];
-		cout << " m=" << m << endl;
-	}*/
-	/*
-	Y[0] = X[p[0]-1] + T[p[0]-1];
-
-	*/
+	
 	//cout << "T T T " << endl;
 	//12345 34512 p0-1=2
 	X[0] = d[p[0] - 1];
@@ -167,20 +139,6 @@ int Perebor(int k, int* p, int N)
 	return min1;//возвращаем минимальное значение критерия
 }
 
-int hamingDist(int* ar, int* D)
-{
-	int hamingCount = 0;
-	for (int i = 0; i < N; i++) {
-		/*cout << ar[i]<<"-";
-		cout << D[i];*/
-
-		if (ar[i] != D[i]) {
-			hamingCount++;
-		}
-	}
-	//cout << hamingCount << " ";
-	return hamingCount;
-}
 
 int** okr(int n, int* D, int** okrs,int dot)
 {
@@ -191,27 +149,7 @@ int** okr(int n, int* D, int** okrs,int dot)
 		ar[i] = D[i]; //cout << ar[i];
 	}
 	//cout << endl;
-	/*do
-	{
-		
-		if (hamingDist(ar, D) == 2)
-		{
-			//cout << "-";
-			//for (int k = 0; k < m; k++) {
-			for (int j = 0; j < N; j++) {
-				okrs[nokr][j] = ar[j];
-				cout << ar[j];
-			}
-			cout << endl;
-			//}
 
-			nokr++;
-		}
-		//cout << "+";
-		
-	} while (next_permutation(ar, ar + n) && nokr != N);//не все перестановки,только ближайшая,выбрать точку
-	
-	*/
 	swap(ar[dot], ar[0]);
 	for (int k = 1; k <= N; k++) {
 		
@@ -228,8 +166,8 @@ int** okr(int n, int* D, int** okrs,int dot)
 	}
 	
 	//cout << "nokr-" << nokr;
-	// struct result { int** okrs; int nokr; };
-	return okrs;//result{ okrs,m };
+
+	return okrs;
 
 }
 
@@ -293,7 +231,6 @@ int hill(int* p)
 		cout << " точка-p[" << dot << "]" <<endl;
 		cout << " max штраф-" << max << endl;
 
-		//auto res = okr(N, D, okrs);//почему тригерит maxO ???
 		cout << "maxO1 ";
 		for (int j = 0; j < N; j++)
 		{
@@ -372,20 +309,7 @@ int hill(int* p)
 		dot = rand() % (N);
 		udot[c] = dot;
 		c++;
-		//  x = x1;
-
-		 // cout << "приспособленность x-" << x << endl;
-		  // cout << "код. x0-" << x0 << endl;
-		/*  if (x > max)
-		  {
-			  max = x;
-			  maxX = maxO;
-
-			  cout << "новый maxX-" << maxX << endl;
-			  cout << "новый max-" << max << endl;
-		  }
-		  else { break; }
-		  */
+		
 
 	}
 	for (int i = 0; i < N; i++) {
