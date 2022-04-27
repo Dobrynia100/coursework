@@ -161,7 +161,7 @@ int hill(int* p,int N)
 {
 
 	int c = 0, n = N,i=0;
-	unsigned int dot, max = 0, x = 0, x1=0;
+	unsigned int dot, max = 0, x1=0;
 	int* D;
 	D = new int[N];
 	int* maxO = new int[N];
@@ -182,10 +182,9 @@ int hill(int* p,int N)
 	c++;
 	//x0 = D[x0];
 	cout << " нач точка p[" << dot<<"]" << endl;
-	x = Raspis(D, N);
+	max = Raspis(D, N);
 	
-	cout << "штраф начальной перестановки-" << x << endl;
-	max = x;
+	cout << "штраф начальной перестановки-" << max << endl;
 	int** okrs = new int* [n];
 	for (int j = 0; j < N; j++)
 	{
@@ -217,21 +216,8 @@ int hill(int* p,int N)
 		cout << " точка-p[" << dot << "]" <<endl;
 		cout << " max штраф-" << max << endl;
 
-		cout << "maxO1 ";
-		for (int j = 0; j < N; j++)
-		{
-
-			cout << maxO[j];
-		}
-		cout << endl;
 		okrs=okr(N, D, okrs,dot);
-		cout << "maxO2 ";
-		for (int j = 0; j < N; j++)
-		{
-
-			cout << maxO[j];
-		}
-		cout << endl;
+	
 		for (int k = 0; k < nokr; k++)//поиск макс окр
 		{
 
@@ -275,14 +261,8 @@ int hill(int* p,int N)
 		
 		}
 		nokr = 0;
-		cout << "\t";
-		//  mmx = maxO;
-
-		//  
+		
 		i++;
-		// сout << "\n";
-
-
 		cout << "финал макс окр = ";
 		for (int j = 0; j < N; j++)
 		{
@@ -291,7 +271,7 @@ int hill(int* p,int N)
 		}
 		cout << endl;
 		D = maxO;
-		x = max;
+		
 		dot = rand() % (N);
 		for (int j = 0; j < c; j++)
 		{
@@ -301,10 +281,9 @@ int hill(int* p,int N)
 		udot[c] = dot;
 		c++;
 		
-
 	}
 	
-	cout << " финальный штраф " << x << endl;	
+	cout << " финальный штраф " << max << endl;	
 	/*try {
 		for (int i = 0; i < N; i++) {
 			delete[] okrs[i];
@@ -315,7 +294,7 @@ int hill(int* p,int N)
 	{
 		cout << "error";
 	}*/
-	return x;
+	return max;
 	
 }
 
@@ -340,97 +319,7 @@ int main()
 	initRaspis(N);
 	if (Raspis(p, N) == -1) {
 		cout << "некорректная последовательность" << endl;
-/*
-		int* p1 = new int[N];
-		int* p2 = new int[N];
-		for (int i = 0; i < N; i++) { p1[i] = i + 1; p2[i] = i + 1;
-		}
-		int min = 100;
-		cout << "Упорядочивание" << endl;
-		//с помощью F или с помощью d ??
-		//c помощью F берем одно из чисел и смотрим на какой из позиций F меньше-лучше подойдет для 3тьего
-		//с помощью смотрим по времени поступления ,сравниваем -лучше подойдет для 4 условия
-		
-		for (int k = 0; k < N; k++)
-		{
-			for (int k1 = 0; k1 < N; k1++)
-			{
-				cout << p1[k1];
-			}
-			cout << endl;
-			/*
-			Y[0] = T[p1[0] - 1];
-			while(Y[]<D[k])
-			{
-				X[j] = Y[j - 1] + 1;
-
-				Y[j] = X[j] + T[p[j] - 1];
-					F[k] = abs(d[k] - X[j - 1]);
-				if (F[k] < min)
-				{
-					min = F[k];
-				}
-				swap(p1[k], p1[j+1]);
-			}//
-			swap(p1[k], p1[0]);
-			cout << "свап-";
-			for (int k1 = 0; k1 < N; k1++)
-			{
-				cout << p1[k1];
-			}
-			cout << endl;
-			Y[0] = T[p1[0] - 1];
-			X[0] = 0;
-			F[k] = abs(d[k] - X[0]);
-			min = F[k];
-			cout << "min-" << min << endl;
-			for (int i = 0; i < N; i++)p2[i] = p1[i];
-			if (min != 0) {
-				for (int j = 1; j <= N; j++) {
-					Y[0] = T[p1[0] - 1];
-					X[0] = 0;
-					X[j] = Y[j - 1] + 1;
-					Y[j] = X[j] + T[p1[j] - 1];
-					cout << " X=" << X[j] << endl;
-					cout << " Y=" << Y[j] << endl;
-					cout << " D=" << D[j-1] << endl;
-					if (Y[j] > D[j]) { break; }
-					F[k] = abs(d[k] - X[j - 1]);
-					cout << "F[" << k << "]" << F[k] << endl;
-					if (F[k] < min)
-					{
-						min = F[k];
-						for (int i = 0; i < N; i++)p2[i] = p1[i];
-						cout << "p2-";
-						for (int k1 = 0; k1 < N; k1++)
-						{
-							cout << p2[k1];
-						}
-
-						cout << endl;
-						cout << "min- " << min << endl;
-					}
-					cout << "p1-";
-
-					//							1			2				3->4				
-					//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12453		
-
-					if (j != k) { swap(p1[k], p1[j - 1]); swap(p1[j], p1[k]); }
-					else { swap(p1[k], p1[j - 1]); swap(p1[j], p1[j + 1]); j++; }
-
-					for (int k1 = 0; k1 < N; k1++)
-					{
-						cout << p1[k1];
-					}
-					cout << endl;
-				}
-
-				for (int i = 0; i < N; i++)p1[i] = p2[i];
-			}
-
-		}
-		for (int i = 0; i < N; i++)p[i] = p1[i];
-		*/	}
+}
 	
 	
 	cout << "метод восхождения на холм " << endl;
@@ -456,7 +345,7 @@ int main()
 	else {
 		try {
 			o = ((double)raz / (double)M) * 100;
-			//o = o1 * 100;
+			
 
 			cout << "Относительное отклонение ="<< setprecision(2)<< o << "%" << endl;
 		}
