@@ -1,12 +1,12 @@
 ﻿#include <iostream>
-#include <algorithm>
-#include <math.h>
+//#include <algorithm>
+//#include <math.h>
 #include <cmath>
-#include <iomanip>      
+//#include <iomanip>      
 #include <locale.h>
 using namespace std;
 int* Best;
-int  nokr = 0;
+int  nokr = 0;//колич эл-ов окрестности
 int* X ; //момент начала выполнения работ
 int* Y; //момент конца выполнения работ
 int* T; //длительность выполнений работ
@@ -27,7 +27,7 @@ void output(int i)
 	cout << endl;
 }
 
-void initRaspis(int* p, int n)
+void initRaspis(int N)
 {
 
 
@@ -126,12 +126,12 @@ int Perebor(int k, int* p, int N)
 }
 
 
-int** okr(int n, int* D, int** okrs,int dot)
+int** okr(int N, int* D, int** okrs,int dot)
 {
 
 	cout << " окрестность: ";
 	int* ar = new int[N];
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < N; ++i) {
 		ar[i] = D[i]; //cout << ar[i];
 	}
 	//cout << endl;
@@ -305,7 +305,7 @@ int hill(int* p,int N)
 	}
 	
 	cout << " финальный штраф " << x << endl;	
-	try {
+	/*try {
 		for (int i = 0; i < N; i++) {
 			delete[] okrs[i];
 		}
@@ -314,7 +314,7 @@ int hill(int* p,int N)
 	catch (...)
 	{
 		cout << "error";
-	}
+	}*/
 	return x;
 	
 }
@@ -337,7 +337,7 @@ int main()
 	C = new int[N];
 	
 	for (int i = 0; i < N; i++)p[i] = i + 1;
-	initRaspis(p, N);
+	initRaspis(N);
 	if (Raspis(p, N) == -1) {
 		cout << "некорректная последовательность" << endl;
 /*
@@ -439,13 +439,15 @@ int main()
 	
 	int M = Perebor(0, p, N);
 	cout << " Точное решение " << M << endl;
+	
 	for (int j = 0; j < N; j++)
 	{
 		cout << Best[j];
 	}
 	cout << endl;
+	cout << " решение восхождением на холм -" << prib << endl;
 	int raz = prib - M;
-	double ab=0,o=0,o1=0;
+	double ab = 0, o = 0;
 	if (M == 0) {
 		ab;
 		if (raz != 0) ab = (double)raz / N;
