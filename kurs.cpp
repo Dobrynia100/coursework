@@ -6,15 +6,14 @@
 #include <locale.h>
 using namespace std;
 int* Best;
-int N;//множество работ
 int  nokr = 0;
-int* X = new int[N]; //момент начала выполнения работ
-int* Y = new int[N];//момент конца выполнения работ
-int* T = new int[N]; //длительность выполнений работ
-int* D = new int[N]; //директивные сроки
-int* d = new int[N]; //вектор моментов поступлений работ
-int* C = new int[N]; //стоимость ожидания обслуживания
-int* F = new int[N];//коэффициент штрафов
+int* X ; //момент начала выполнения работ
+int* Y; //момент конца выполнения работ
+int* T; //длительность выполнений работ
+int* D; //директивные сроки
+int* d; //вектор моментов поступлений работ
+int* C ; //стоимость ожидания обслуживания
+int* F ;//коэффициент штрафов
 
 void output(int i)
 {
@@ -32,13 +31,6 @@ void initRaspis(int* p, int n)
 {
 
 
-	cout << "ручной ввод других данных ? (y/n)" << endl;
-	char c;
-	cin >> c;
-
-	if (c == 'n')
-	{//
-	here:
 		//srand(time(NULL));
 		for (int i = 0; i < N; i++)
 		{
@@ -52,12 +44,6 @@ void initRaspis(int* p, int n)
 
 			output(i);
 		}
-
-	}
-	else
-	{
-		goto here;
-	}
 	//return 0;
 }
 int Raspis(int* p, int N)//получаем порядок выводим его штрафы
@@ -171,7 +157,7 @@ int** okr(int n, int* D, int** okrs,int dot)
 
 }
 
-int hill(int* p)
+int hill(int* p,int N)
 {
 
 	int c = 0, n = N,i=0;
@@ -318,12 +304,19 @@ int hill(int* p)
 
 	}
 	
-	cout << " финальный штраф " << x << endl;
-	/*for (int i = 0; i < N; i++) {
-		delete[] okrs[i];
+	cout << " финальный штраф " << x << endl;	
+	try {
+		for (int i = 0; i < N; i++) {
+			delete[] okrs[i];
+		}
+		delete[] okrs;
 	}
-	delete[] okrs;*/
+	catch (...)
+	{
+		cout << "error";
+	}
 	return x;
+	
 }
 
 int main()
@@ -331,9 +324,18 @@ int main()
 
 	setlocale(LC_ALL, "RUS");
 	srand(time(0));
+	int N;//множество работ
 	cout << "введите количество работ" << endl;
 	cin >> N;
 	int* p = new int[N];
+	X = new int[N];
+	Y = new int[N];
+	D = new int[N];
+	d = new int[N];
+	F = new int[N];
+	T = new int[N];
+	C = new int[N];
+	
 	for (int i = 0; i < N; i++)p[i] = i + 1;
 	initRaspis(p, N);
 	if (Raspis(p, N) == -1) {
@@ -432,8 +434,9 @@ int main()
 	
 	
 	cout << "метод восхождения на холм " << endl;
-	int prib = hill(p);
+	int prib = hill(p,N);
 	Best = new int[N];
+	
 	int M = Perebor(0, p, N);
 	cout << " Точное решение " << M << endl;
 	for (int j = 0; j < N; j++)
@@ -449,14 +452,22 @@ int main()
 		cout << "Абсолютное отклонение =" << ab;
 	}
 	else {
-		 o = ((double)raz / (double)M)*100;
-		 //o = o1 * 100;
-		
-		cout << "Относительное отклонение ="
-			<< o << "%" << endl;
+		try {
+			o = ((double)raz / (double)M) * 100;
+			//o = o1 * 100;
+
+			cout << "Относительное отклонение ="
+				<< o << "%" << endl;
+		}
+		catch (const bad_alloc& e)
+		{
+			cout << "Error: " << e.what() << '\n';
+		}
+
 
 	}
 	delete[] Best;
+	
 	delete[] X;
 	delete[] Y;
 	delete[] T;
