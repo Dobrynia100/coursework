@@ -108,7 +108,7 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 int Perebor(int k, int* p, int N)
 {
 	static int min1 = INT_MAX;
-	int ty, m;
+	int  m;
 	{
 		if (k == N)//полная перестановка
 		{
@@ -317,11 +317,12 @@ int hill(int* p)
 		
 
 	}
-	for (int i = 0; i < N; i++) {
+	
+	cout << " финальный штраф " << x << endl;
+	/*for (int i = 0; i < N; i++) {
 		delete[] okrs[i];
 	}
-	delete[] okrs;
-	cout << " финальный штраф " << x << endl;;
+	delete[] okrs;*/
 	return x;
 }
 
@@ -439,16 +440,30 @@ int main()
 	{
 		cout << Best[j];
 	}
-	double o1 = ((prib- M) / M) ;
-	int o = o1 * 100;
 	cout << endl;
-	cout << "Относительное отклонение =" <<setprecision(2) << o << "%" << endl;
-	double ab1 = (prib - M)/ N;
-	double ab;
-	if (ab1 != 0)
-		ab = ab1 / N;
-	else ab = 0;
-	cout << "Абсолютное отклонение ="  << ab;
-	
+	int raz = prib - M;
+	double ab=0,o=0,o1=0;
+	if (M == 0) {
+		ab;
+		if (raz != 0) ab = (double)raz / N;
+		cout << "Абсолютное отклонение =" << ab;
+	}
+	else {
+		 o = ((double)raz / (double)M)*100;
+		 //o = o1 * 100;
+		
+		cout << "Относительное отклонение ="
+			<< o << "%" << endl;
+
+	}
+	delete[] Best;
+	delete[] X;
+	delete[] Y;
+	delete[] T;
+	delete[] D;
+	delete[] d;
+	delete[] C;
+	delete[] F;
 	return 0;
+	
 }
