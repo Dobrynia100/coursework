@@ -2,7 +2,7 @@
 //#include <algorithm>
 //#include <math.h>
 #include <cmath>
-//#include <iomanip>      
+#include <iomanip>      
 #include <locale.h>
 using namespace std;
 int* Best;
@@ -85,7 +85,7 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 			max = F[i];
 	}
 	m = max;
-	cout << " m=" << m << endl;
+	//cout << " m=" << m << endl;
 	//m=штраф расписания
 	return m;
 
@@ -143,14 +143,14 @@ int** okr(int N, int* D, int** okrs,int dot)
 			okrs[nokr][j] = ar[j];
 			cout << ar[j];
 		}
-		cout << endl;
+		
 		nokr++;
 		//							1			2				3->4				
 		//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12453		
 		if (k != dot) { swap(ar[dot], ar[k-1]); swap(ar[k], ar[dot]); }
 		else {  swap(ar[dot], ar[k - 1]); swap(ar[k], ar[k + 1]); k++;}
 	}
-	
+	cout << endl;
 	//cout << "nokr-" << nokr;
 
 	return okrs;
@@ -258,12 +258,12 @@ int hill(int* p,int N)
 
 			if (x1 < max)
 			{
-				maxO = okrs[k];
+			
 
 				cout << "нов макс окр =" << endl;
 				for (int j = 0; j < N; j++)
 				{
-
+					maxO[j] = okrs[k][j];
 					cout << maxO[j];
 				}
 				cout << endl;
@@ -458,8 +458,7 @@ int main()
 			o = ((double)raz / (double)M) * 100;
 			//o = o1 * 100;
 
-			cout << "Относительное отклонение ="
-				<< o << "%" << endl;
+			cout << "Относительное отклонение ="<< setprecision(2)<< o << "%" << endl;
 		}
 		catch (const bad_alloc& e)
 		{
@@ -469,7 +468,6 @@ int main()
 
 	}
 	delete[] Best;
-	
 	delete[] X;
 	delete[] Y;
 	delete[] T;
