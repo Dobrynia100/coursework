@@ -1,11 +1,12 @@
 ﻿#include <iostream>
-//#include <algorithm>
+#include <algorithm>
 //#include <math.h>
 #include <cmath>
 #include <iomanip>      
 #include <locale.h>
 using namespace std;
 int* Best;
+int* Best2;
 int  nokr = 0;//колич эл-ов окрестности
 int* X ; //момент начала выполнения работ
 int* Y; //момент конца выполнения работ
@@ -39,7 +40,8 @@ void initRaspis(int N)
 			d[i] = rand() % 10 + 1;
 			D[i] = rand() % (2 * (T[i] + d[i]))+ (T[i]+d[i]);
 			C[i] = rand() % 10 + 0;
-			//X[0] =0;
+			X[i] =0;
+			
 			//cout << " \t 1задача №" << i << endl;
 
 			output(i);
@@ -50,9 +52,10 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 {
 
 	int m = 0;
-	
+	//с начала
 	//cout << "T T T " << endl;
 	//12345 34512 p0-1=2
+	/*
 	X[0] = d[p[0] - 1];
 	Y[0] = T[p[0] - 1]+X[0];
 	for (int i = 1; i < N; i++)
@@ -77,6 +80,19 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	}
 
 	F[N - 1] = abs(d[N - 1] - X[N - 1]);
+	*/
+	//c конца 
+	X[N-1] = D[p[N-1] - 1]-T[N-1];
+	Y[N-1] = D[p[N-1] - 1];
+	F[N-1] = abs(d[N-1] - X[N-1]);
+	for (int i = N-2; i > 0; i--)
+	{
+		
+		Y[i] = X[p[i]];
+		X[i] = X[p[i] - 1] - T[i];
+		if (Y[i] > D[i]) { return -1; }
+		F[i] = abs(d[i] - X[i]);
+	}
 	int max = 0;
 	for (int i = 0; i < N; i++)
 	{
@@ -101,7 +117,7 @@ int Perebor(int k, int* p, int N)
 			for (int i = 0; i < N; i++)
 				cout << p[i];
 			m = Raspis(p, N);//строим расписание. Написать отдельную функцию 
-			if (m == -1) { cout << "некорректная последовательность" << endl; goto here; }
+			if (m == -1) { cout << " некорректная последовательность" << endl; goto here; }
 			if (min1 > m)// ищем минимум
 			{
 				min1 = m;
@@ -143,10 +159,10 @@ int** okr(int N, int* D, int** okrs,int dot)
 			okrs[nokr][j] = ar[j];
 			cout << ar[j];
 		}
-		
+		cout << " ";
 		nokr++;
 		//							1			2				3->4				
-		//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12453		
+		//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12543		
 		if (k != dot) { swap(ar[dot], ar[k-1]); swap(ar[k], ar[dot]); }
 		else {  swap(ar[dot], ar[k - 1]); swap(ar[k], ar[k + 1]); k++;}
 	}
@@ -180,7 +196,6 @@ int hill(int* p,int N)
 	dot = rand() % (N);
 	udot[c] = dot;
 	c++;
-	//x0 = D[x0];
 	cout << " нач точка p[" << dot<<"]" << endl;
 	max = Raspis(D, N);
 	
@@ -203,7 +218,7 @@ int hill(int* p,int N)
 
 		/*
 		12345=D
-		x-ее штраф
+		max-ее штраф
 		ее окрестность
 		while{
 		окрестность{х1-штраф окр[j] если штраф меньше берем эту перестановку}
@@ -226,11 +241,11 @@ int hill(int* p,int N)
 
 				per[j] = okrs[k][j];
 			}
-			// x1 = 0;
+			
 			
 			x1 = Raspis(per, N);
 			if (x1 == -1) {
-				cout << "некорректная последовательность" << endl;
+				cout << " некорректная последовательность" << endl;
 				goto here1;
 			}
 			cout << "выбр перестановка ";
@@ -270,6 +285,7 @@ int hill(int* p,int N)
 			cout << maxO[j];
 		}
 		cout << endl;
+		
 		D = maxO;
 		
 		dot = rand() % (N);
@@ -282,7 +298,10 @@ int hill(int* p,int N)
 		c++;
 		
 	}
-	
+	for (int j = 0; j < N; j++)
+	{
+		Best2[j] = maxO[j];
+	}
 	cout << " финальный штраф " << max << endl;	
 	/*try {
 		for (int i = 0; i < N; i++) {
@@ -297,7 +316,28 @@ int hill(int* p,int N)
 	return max;
 	
 }
+int* rand_per(int n,int* p)
+{
+	int* ar = new int[n];
+	int r;
+	for (int i = 0; i < n; ++i)
+		ar[i] = i + 1;
+	
+	do
+	{
+		r = rand() % 100;//n
+		if (r >= 90) {
+			for (int i = 0; i < n; ++i) {
+				//cout << ar[i] << " ";
+				p[i] = ar[i];
+			}
+		}
+		//cout << endl;
 
+	} while (next_permutation(ar, ar + n));
+
+	return p;
+}
 int main()
 {
 
@@ -317,24 +357,37 @@ int main()
 	
 	for (int i = 0; i < N; i++)p[i] = i + 1;
 	initRaspis(N);
+	
+	Best2 = new int[N];
+	//стартовая полностью случайная ??? +
+	//ввод из файла?
+	p = rand_per(N, p);
 	if (Raspis(p, N) == -1) {
-		cout << "некорректная последовательность" << endl;
-}
-	
-	
+		
+		while (Raspis(p, N) == -1)
+		{
+			p = rand_per(N, p);
+		}
+	}
+
 	cout << "метод восхождения на холм " << endl;
 	int prib = hill(p,N);
 	Best = new int[N];
 	
 	int M = Perebor(0, p, N);
-	cout << " Точное решение " << M << endl;
+	cout << " Точное решение: " << M << endl;
 	
 	for (int j = 0; j < N; j++)
 	{
 		cout << Best[j];
 	}
 	cout << endl;
-	cout << " решение восхождением на холм -" << prib << endl;
+	cout << " решение восхождением на холм:" << prib << endl;
+	for (int j = 0; j < N; j++)
+	{
+		cout << Best2[j];
+	}
+	cout << endl;
 	int raz = prib - M;
 	double ab = 0, o = 0;
 	if (M == 0) {
@@ -357,6 +410,7 @@ int main()
 
 	}
 	delete[] Best;
+	delete[] Best2;
 	delete[] X;
 	delete[] Y;
 	delete[] T;
