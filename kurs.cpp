@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <fstream>
 #include <algorithm>
 //#include <math.h>
 #include <cmath>
@@ -33,19 +34,57 @@ void initRaspis(int N)
 
 
 		//srand(time(NULL));
+	cout << "Ввод из файла ?(y/n)" << endl;
+	char c;
+	//cin >> c;
+	c = 'y';
+	if (c == 'n')
+	{
 		for (int i = 0; i < N; i++)
 		{
 
 			T[i] = rand() % 10 + 1;
 			d[i] = rand() % 10 + 1;
-			D[i] = rand() % (2 * (T[i] + d[i]))+ (T[i]+d[i]);
+			D[i] = rand() % (2 * (T[i] + d[i])) + (T[i] + d[i]);
 			C[i] = rand() % 10 + 0;
-			X[i] =0;
-			
+			X[i] = 0;
+
 			//cout << " \t 1задача №" << i << endl;
 
 			output(i);
 		}
+	}
+	else
+	{
+		
+		ifstream infile;
+		infile.open("input.txt");
+		
+			for (int i = 0; i < N; i++)
+			{
+
+				infile >> T[i];
+				
+			
+			}
+			for (int i = 0; i < N; i++)
+			{
+
+				
+				infile >> d[i];
+				
+				
+			}
+			for (int i = 0; i < N; i++)
+			{
+
+				
+				infile >> D[i];
+				output(i);
+			}
+		infile.close();
+		
+	}
 	//return 0;
 }
 int Raspis(int* p, int N)//получаем порядок выводим его штрафы
@@ -82,16 +121,28 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	F[N - 1] = abs(d[N - 1] - X[N - 1]);
 	*/
 	//c конца 
-	X[N-1] = D[p[N-1] - 1]-T[N-1];
+	//cout << "T[N-1] " << T[p[N - 1] - 1] << endl;
+
+	X[N-1] = D[p[N-1] - 1]-T[p[N - 1]-1];
 	Y[N-1] = D[p[N-1] - 1];
-	F[N-1] = abs(d[N-1] - X[N-1]);
-	for (int i = N-2; i > 0; i--)
+	F[N-1] = abs(d[p[N - 1] - 1] - X[N-1]);
+	//cout << "d[p[N-1] - 1]" << d[p[N - 1] - 1] << endl;
+	/*cout << "p=" << p[N - 1] << endl;
+	cout << " X=" << X[N-1] << endl;
+	cout << " Y=" << Y[N-1] << endl;
+	cout << " F=" << F[N-1] << endl;*/
+	for (int i = N-2; i >= 0; i--)
 	{
-		
-		Y[i] = X[p[i]];
-		X[i] = X[p[i] - 1] - T[i];
-		if (Y[i] > D[i]) { return -1; }
-		F[i] = abs(d[i] - X[i]);
+		//cout << "i=" << i << endl;
+		//cout << "p[i+1]-1" << p[i + 1] - 1 << endl;
+		Y[i] = X[i+1];
+		X[i] = Y[i] - T[p[i] - 1];
+	/*	cout << " X=" << X[i] << endl;
+		cout << " Y=" << Y[i] << endl;
+		cout << " D=" << D[p[i] - 1] << endl;*/
+		if (Y[i] > D[p[i] - 1]) { return -1; }
+		F[i] = abs(d[p[i] - 1] - X[i]);
+		//cout << " F=" << F[i] << endl;
 	}
 	int max = 0;
 	for (int i = 0; i < N; i++)
@@ -106,7 +157,19 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	return m;
 
 }
-
+void test(int* p)
+{
+	cout << "test" << endl;
+	int p1[9] = { 2, 9, 6, 3, 4, 7, 8, 1, 5 };
+	for (int i = 0; i < 9; ++i) {
+		p[i] = p1[i]; cout << p[i];
+	}
+	cout << endl;
+	int m=Raspis(p, 9);
+	cout << " m=" << m << endl;
+	exit(0);
+	
+}
 int Perebor(int k, int* p, int N)
 {
 	static int min1 = INT_MAX;
@@ -345,7 +408,8 @@ int main()
 	srand(time(0));
 	int N;//множество работ
 	cout << "введите количество работ" << endl;
-	cin >> N;
+	//cin >> N;
+	N = 9;
 	int* p = new int[N];
 	X = new int[N];
 	Y = new int[N];
@@ -357,7 +421,7 @@ int main()
 	
 	for (int i = 0; i < N; i++)p[i] = i + 1;
 	initRaspis(N);
-	
+	//test(p);
 	Best2 = new int[N];
 	//стартовая полностью случайная ??? +
 	//ввод из файла?
@@ -369,7 +433,7 @@ int main()
 			p = rand_per(N, p);
 		}
 	}
-
+	
 	cout << "метод восхождения на холм " << endl;
 	int prib = hill(p,N);
 	Best = new int[N];
