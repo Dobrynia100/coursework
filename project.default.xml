@@ -1,0 +1,29 @@
+<application>
+  <component name="ProjectManager">
+    <defaultProject>
+      <component name="ProjectInspectionProfilesVisibleTreeState">
+        <entry key="Project Default">
+          <profile-state>
+            <expanded-state>
+              <State />
+              <State>
+                <id>Python</id>
+              </State>
+              <State>
+                <id>Shell Script</id>
+              </State>
+            </expanded-state>
+            <selected-state>
+              <State>
+                <id>Buildout</id>
+              </State>
+            </selected-state>
+          </profile-state>
+        </entry>
+      </component>
+      <component name="PropertiesComponent">
+        <property name="settings.editor.selected.configurable" value="configurable.group.language" />
+      </component>
+    </defaultProject>
+  </component>
+</application>
