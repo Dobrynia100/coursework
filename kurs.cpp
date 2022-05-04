@@ -20,12 +20,10 @@ int* F ;//коэффициент штрафов
 void output(int i)
 {
 	cout << " \t задача №" << i+1 << endl;
-	//cout << "  момент начала выполнения X=" << X[i] << endl;
-	//cout << "  момент конца выполнения Y=" << Y[i] << endl;
+	
 	cout << "   T=" << T[i];
 	cout << "   D=" << D[i];
 	cout << "   d=" << d[i];
-	//cout << "  коэффициент штрафов F=" << F[i] << endl;
 	cout << endl;
 }
 
@@ -36,8 +34,8 @@ void initRaspis(int N)
 		//srand(time(NULL));
 	cout << "Ввод из файла ?(y/n)" << endl;
 	char c;
-	//cin >> c;
-	c = 'y';
+	cin >> c;
+	//c = 'y';
 	if (c == 'n')
 	{
 		for (int i = 0; i < N; i++)
@@ -91,55 +89,24 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 {
 
 	int m = 0;
-	//с начала
-	//cout << "T T T " << endl;
-	//12345 34512 p0-1=2
-	/*
-	X[0] = d[p[0] - 1];
-	Y[0] = T[p[0] - 1]+X[0];
-	for (int i = 1; i < N; i++)
-	{
-		if (d[i] <= Y[i - 1])
-		{
-			X[i] = Y[i - 1] + 1;
-		}
-		else X[i] = d[i];
-
-		Y[i] = X[i] + T[p[i] - 1];
-
-		//cout << " X=" << X[i] << endl;
-		//cout << " Y=" << Y[i] << endl;
-		if (X[i] < d[i]) { return -1; }
-		F[i - 1] = abs(d[i - 1] - X[i - 1]);
-
-		
-		//output(i);
-
-
-	}
-
-	F[N - 1] = abs(d[N - 1] - X[N - 1]);
-	*/
+	
 	//c конца 
 	//cout << "T[N-1] " << T[p[N - 1] - 1] << endl;
 
 	X[N-1] = D[p[N-1] - 1]-T[p[N - 1]-1];
 	Y[N-1] = D[p[N-1] - 1];
 	F[N-1] = abs(d[p[N - 1] - 1] - X[N-1]);
-	//cout << "d[p[N-1] - 1]" << d[p[N - 1] - 1] << endl;
+	
 	/*cout << "p=" << p[N - 1] << endl;
 	cout << " X=" << X[N-1] << endl;
 	cout << " Y=" << Y[N-1] << endl;
 	cout << " F=" << F[N-1] << endl;*/
 	for (int i = N-2; i >= 0; i--)
 	{
-		//cout << "i=" << i << endl;
-		//cout << "p[i+1]-1" << p[i + 1] - 1 << endl;
+		
 		Y[i] = X[i+1];
 		X[i] = Y[i] - T[p[i] - 1];
-	/*	cout << " X=" << X[i] << endl;
-		cout << " Y=" << Y[i] << endl;
-		cout << " D=" << D[p[i] - 1] << endl;*/
+	
 		if (Y[i] > D[p[i] - 1]) { return -1; }
 		F[i] = abs(d[p[i] - 1] - X[i]);
 		//cout << " F=" << F[i] << endl;
@@ -157,6 +124,7 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	return m;
 
 }
+
 void test(int* p)
 {
 	cout << "test" << endl;
@@ -408,8 +376,8 @@ int main()
 	srand(time(0));
 	int N;//множество работ
 	cout << "введите количество работ" << endl;
-	//cin >> N;
-	N = 9;
+	cin >> N;
+	
 	int* p = new int[N];
 	X = new int[N];
 	Y = new int[N];
@@ -423,8 +391,6 @@ int main()
 	initRaspis(N);
 	//test(p);
 	Best2 = new int[N];
-	//стартовая полностью случайная ??? +
-	//ввод из файла?
 	p = rand_per(N, p);
 	if (Raspis(p, N) == -1) {
 		
