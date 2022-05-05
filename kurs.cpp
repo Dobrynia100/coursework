@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <algorithm>
-//#include <math.h>
 #include <cmath>
 #include <iomanip>      
 #include <locale.h>
@@ -31,11 +30,11 @@ void initRaspis(int N)
 {
 
 
-		//srand(time(NULL));
+		
 	cout << "Ввод из файла ?(y/n)" << endl;
 	char c;
 	cin >> c;
-	//c = 'y';
+	
 	if (c == 'n')
 	{
 		for (int i = 0; i < N; i++)
@@ -47,7 +46,7 @@ void initRaspis(int N)
 			C[i] = rand() % 10 + 0;
 			X[i] = 0;
 
-			//cout << " \t 1задача №" << i << endl;
+			
 
 			output(i);
 		}
@@ -83,24 +82,17 @@ void initRaspis(int N)
 		infile.close();
 		
 	}
-	//return 0;
 }
 int Raspis(int* p, int N)//получаем порядок выводим его штрафы
 {
 
 	int m = 0;
 	
-	//c конца 
-	//cout << "T[N-1] " << T[p[N - 1] - 1] << endl;
-
 	X[N-1] = D[p[N-1] - 1]-T[p[N - 1]-1];
 	Y[N-1] = D[p[N-1] - 1];
 	F[N-1] = abs(d[p[N - 1] - 1] - X[N-1]);
 	
-	/*cout << "p=" << p[N - 1] << endl;
-	cout << " X=" << X[N-1] << endl;
-	cout << " Y=" << Y[N-1] << endl;
-	cout << " F=" << F[N-1] << endl;*/
+	
 	for (int i = N-2; i >= 0; i--)
 	{
 		
@@ -109,7 +101,7 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 	
 		if (Y[i] > D[p[i] - 1]) { return -1; }
 		F[i] = abs(d[p[i] - 1] - X[i]);
-		//cout << " F=" << F[i] << endl;
+		
 	}
 	int max = 0;
 	for (int i = 0; i < N; i++)
@@ -119,25 +111,13 @@ int Raspis(int* p, int N)//получаем порядок выводим его
 			max = F[i];
 	}
 	m = max;
-	//cout << " m=" << m << endl;
+	
 	//m=штраф расписания
 	return m;
 
 }
 
-void test(int* p)
-{
-	cout << "test" << endl;
-	int p1[9] = { 2, 9, 6, 3, 4, 7, 8, 1, 5 };
-	for (int i = 0; i < 9; ++i) {
-		p[i] = p1[i]; cout << p[i];
-	}
-	cout << endl;
-	int m=Raspis(p, 9);
-	cout << " m=" << m << endl;
-	exit(0);
-	
-}
+
 int Perebor(int k, int* p, int N)
 {
 	static int min1 = INT_MAX;
@@ -145,10 +125,10 @@ int Perebor(int k, int* p, int N)
 	{
 		if (k == N)//полная перестановка
 		{
-			for (int i = 0; i < N; i++)
-				cout << p[i];
+			
 			m = Raspis(p, N);//строим расписание. Написать отдельную функцию 
-			if (m == -1) { cout << " некорректная последовательность" << endl; goto here; }
+			if (m == -1) { 
+			goto here; }
 			if (min1 > m)// ищем минимум
 			{
 				min1 = m;
@@ -157,7 +137,7 @@ int Perebor(int k, int* p, int N)
 					Best[j] = p[j];//Best - глобальный массив
 				}
 			}
-			cout << " (" << m << ")" << endl;
+			
 		}
 	}
 	//фиксированная часть, уже построенная длины k
@@ -179,9 +159,9 @@ int** okr(int N, int* D, int** okrs,int dot)
 	cout << " окрестность: ";
 	int* ar = new int[N];
 	for (int i = 0; i < N; ++i) {
-		ar[i] = D[i]; //cout << ar[i];
+		ar[i] = D[i]; 
 	}
-	//cout << endl;
+	
 
 	swap(ar[dot], ar[0]);
 	for (int k = 1; k <= N; k++) {
@@ -192,14 +172,11 @@ int** okr(int N, int* D, int** okrs,int dot)
 		}
 		cout << " ";
 		nokr++;
-		//							1			2				3->4				
-		//12345 dot=2 (3) 32145 1 12345 13245 2 12345 12435 3		12345 12543		
+		
 		if (k != dot) { swap(ar[dot], ar[k-1]); swap(ar[k], ar[dot]); }
 		else {  swap(ar[dot], ar[k - 1]); swap(ar[k], ar[k + 1]); k++;}
 	}
 	cout << endl;
-	//cout << "nokr-" << nokr;
-
 	return okrs;
 
 }
@@ -212,7 +189,7 @@ int hill(int* p,int N)
 	int* D;
 	D = new int[N];
 	int* maxO = new int[N];
-
+	int krit1,krit2;
 	for (int j = 0; j < N; j++) //кодировки
 	{
 
@@ -222,7 +199,7 @@ int hill(int* p,int N)
 	}
 	
 	cout << endl;
-	//srand(time(NULL));
+	
 	int* udot = new int[N];
 	dot = rand() % (N);
 	udot[c] = dot;
@@ -244,24 +221,15 @@ int hill(int* p,int N)
 		per[j] = 0;
 	}
 
-	while (i <= n)
+	while (i <= n)		
 	{
 
-		/*
-		12345=D
-		max-ее штраф
-		ее окрестность
-		while{
-		окрестность{х1-штраф окр[j] если штраф меньше берем эту перестановку}
-		шаг-
-		D=перестановка с меньшим штрафом
-		}
-		*/
 
 		cout << " Шаг-" << i << endl;
 		cout << " точка-p[" << dot << "]" <<endl;
 		cout << " max штраф-" << max << endl;
-
+		krit1 = max;
+		krit2 = krit1;
 		okrs=okr(N, D, okrs,dot);
 	
 		for (int k = 0; k < nokr; k++)//поиск макс окр
@@ -300,7 +268,7 @@ int hill(int* p,int N)
 				}
 				cout << endl;
 				max = x1;
-
+				krit2 = max;
 			}
 		here1:
 			cout << endl;
@@ -327,23 +295,14 @@ int hill(int* p,int N)
 		}
 		udot[c] = dot;
 		c++;
-		
+		if (krit1 == krit2) break;
 	}
 	for (int j = 0; j < N; j++)
 	{
 		Best2[j] = maxO[j];
 	}
 	cout << " финальный штраф " << max << endl;	
-	/*try {
-		for (int i = 0; i < N; i++) {
-			delete[] okrs[i];
-		}
-		delete[] okrs;
-	}
-	catch (...)
-	{
-		cout << "error";
-	}*/
+	
 	return max;
 	
 }
@@ -356,14 +315,14 @@ int* rand_per(int n,int* p)
 	
 	do
 	{
-		r = rand() % 100;//n
+		r = rand() % 100;
 		if (r >= 90) {
 			for (int i = 0; i < n; ++i) {
-				//cout << ar[i] << " ";
+			
 				p[i] = ar[i];
 			}
 		}
-		//cout << endl;
+		
 
 	} while (next_permutation(ar, ar + n));
 
@@ -389,7 +348,7 @@ int main()
 	
 	for (int i = 0; i < N; i++)p[i] = i + 1;
 	initRaspis(N);
-	//test(p);
+	
 	Best2 = new int[N];
 	p = rand_per(N, p);
 	if (Raspis(p, N) == -1) {
